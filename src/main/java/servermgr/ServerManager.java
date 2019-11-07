@@ -22,4 +22,20 @@ public class ServerManager {
     {
         return true;
     }
+
+    /**
+     * Get a list of all extensions being used by the server
+     * @return
+     */
+    public static String getExtensions() {
+        return "[Hypervisor, Kubernetes, RAID-6]";
+    }
+
+    /**
+     * Get info on memory status
+     * @return
+     */
+    public static String getMemoryStatus() {
+        return "Running low";
+    }
 }

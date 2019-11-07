@@ -1,0 +1,71 @@
+
+echo curl http://localhost:8080/server/status/detailed
+curl http://localhost:8080/server/status/detailed
+echo
+echo -----
+echo
+sleep 3
+
+echo curl http://localhost:8080/server/status/detailed?details=operations
+curl http://localhost:8080/server/status/detailed?details=operations
+echo
+echo -----
+echo
+sleep 3
+
+echo curl http://localhost:8080/server/status/detailed?details=operations,extensions
+curl http://localhost:8080/server/status/detailed?details=operations,extensions
+echo
+echo -----
+echo
+sleep 3
+
+echo curl http://localhost:8080/server/status/detailed?details=operations,extensions,memory
+curl http://localhost:8080/server/status/detailed?details=operations,extensions,memory
+echo
+echo -----
+echo
+sleep 3
+
+echo curl "http://localhost:8080/server/status/detailed?details=operations,extensions,memory&name=Noach"
+curl "http://localhost:8080/server/status/detailed?details=operations,extensions,memory&name=Noach"
+echo
+echo -----
+echo
+sleep 3
+
+echo curl "http://localhost:8080/server/status/detailed?details=operations,memory&name=Noach"
+curl "http://localhost:8080/server/status/detailed?details=operations,memory&name=Noach"
+echo
+echo -----
+echo
+sleep 3
+
+echo curl "http://localhost:8080/server/status/detailed?details=extensions,memory&name=Noach"
+curl "http://localhost:8080/server/status/detailed?details=extensions,memory&name=Noach"
+echo
+echo -----
+echo
+sleep 3
+
+echo curl "http://localhost:8080/server/status/detailed?name=Noach&details=extensions,memory"
+curl "http://localhost:8080/server/status/detailed?name=Noach&details=extensions,memory"
+echo
+echo -----
+echo
+sleep 3
+
+echo curl http://localhost:8080/server/status/detailed?details=memory,operations,extensions,memory
+curl http://localhost:8080/server/status/detailed?details=memory,operations,extensions,memory
+echo
+echo -----
+echo
+sleep 3
+
+echo curl http://localhost:8080/server/status/detailed?details=memory,operations,junkERROR
+curl http://localhost:8080/server/status/detailed?details=memory,operations,junkERROR
+echo
+echo -----
+echo
+sleep 3
+
