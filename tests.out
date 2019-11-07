@@ -1,0 +1,40 @@
+curl http://localhost:8080/server/status/detailed
+{"timestamp":"2019-11-06T07:20:47.663+0000","status":400,"error":"Bad Request","message":"Required List parameter 'details' is not present","path":"/server/status/detailed"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=operations
+{"id":1,"contentHeader":"Server Status requested by Anonymous","statusDesc":"Server is up, and is operating normally"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=operations,extensions
+{"id":2,"contentHeader":"Server Status requested by Anonymous","statusDesc":"Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6]"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=operations,extensions,memory
+{"id":3,"contentHeader":"Server Status requested by Anonymous","statusDesc":"Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=operations,extensions,memory&name=Noach
+{"id":4,"contentHeader":"Server Status requested by Noach","statusDesc":"Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=operations,memory&name=Noach
+{"id":5,"contentHeader":"Server Status requested by Noach","statusDesc":"Server is up, and is operating normally, and its memory is Running low"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=extensions,memory&name=Noach
+{"id":6,"contentHeader":"Server Status requested by Noach","statusDesc":"Server is up, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"}
+-----
+
+curl http://localhost:8080/server/status/detailed?name=Noach&details=extensions,memory
+{"id":7,"contentHeader":"Server Status requested by Noach","statusDesc":"Server is up, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=memory,operations,extensions,memory
+{"id":8,"contentHeader":"Server Status requested by Anonymous","statusDesc":"Server is up, and its memory is Running low, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"}
+-----
+
+curl http://localhost:8080/server/status/detailed?details=memory,operations,junkERROR
+{"timestamp":"2019-11-06T07:21:18.843+0000","status":400,"error":"Bad Request","message":"Invalid details option: junkERROR","path":"/server/status/detailed"}
+-----
+

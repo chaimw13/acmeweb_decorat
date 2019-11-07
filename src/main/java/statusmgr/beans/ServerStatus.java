@@ -1,48 +1,48 @@
 package statusmgr.beans;
 
-import servermgr.ServerManager;
-
 /**
- * A POJO that represents Server Status and can be used to generate JSON for that status
+ * Declare how a general Server Status return object should behave and what it must keep track of.
+ * Items that concrete classes must provide are defined here as abstract methods.
  */
-public class ServerStatus {
+public abstract class ServerStatus implements StatusResponse {
 
-    private  long id;
-    private String contentHeader;
-    private String statusDesc = "Unknown";
+    protected long id;
+    protected String contentHeader;
 
     /**
-     * Construct a ServerStatus using info passed in for identification, and obtaining current
-     * server status from the appropriate Manager class.
-     *
-     * @param id                a numeric identifier/counter of which request this
-     * @param contentHeader     info about the request
+     * Constructor that takes the info already known about the request.
+     * @param id
+     * @param contentHeader
      */
     public ServerStatus(long id, String contentHeader) {
         this.id = id;
         this.contentHeader = contentHeader;
-
-        // Obtain current status of server
-        this.statusDesc = ServerManager.getCurrentServerStatus();
     }
 
-    public ServerStatus() {
 
-    }
-
+    /**
+     * Gets the sequential ID of the request, for tracking purposes. Not usually very important to have a correct value.
+     *
+     * @return an integer purported to be the sequential number of the request.
+     */
+    @Override
     public long getId() {
-        return id;
+
+        return this.id;
     }
 
+    @Override
     public String getContentHeader() {
 
-        return contentHeader;
+        return this.contentHeader;
     }
 
 
-    public String getStatusDesc() {
-        return statusDesc;
-    }
-
+    /**
+     * Status description to be obtained/modified and returned by the concrete class
+     * @return A String describing the status of the server, possibly decorated by multiple concrete classes.
+     */
+    @Override
+    public abstract String getStatusDesc();
 
 }
