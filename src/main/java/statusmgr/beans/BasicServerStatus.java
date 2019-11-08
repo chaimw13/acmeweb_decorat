@@ -15,12 +15,18 @@ public class BasicServerStatus extends ServerStatus {
      */
     public BasicServerStatus(long id, String contentHeader) {
         super(id, contentHeader);
+        this.accumulatedCost = getDecorationCost(); // set it to our cost, the most basic cost.
     }
 
     public String getStatusDesc() {
         // just get the basic status info
         String statusStr = ServerManager.getCurrentServerStatus();
         return statusStr;
+    }
+
+    @Override
+    protected int getDecorationCost() {
+        return 1;
     }
 
 
