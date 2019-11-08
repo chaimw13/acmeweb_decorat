@@ -14,11 +14,13 @@ public class OperationsServerStatus extends ServerStatus {
 
     /**
      * Construct a Status that we can decorate, based on info from the undecorated status
+     * Accumulate the cost from the undecorated object plus our cost.
      * @param undecoratedStatus a Status that we are to decorate
      */
     public OperationsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
+        this.accumulatedCost = undecoratedStatus.accumulatedCost + getDecorationCost();
     }
 
     /**
@@ -30,6 +32,11 @@ public class OperationsServerStatus extends ServerStatus {
         return this.undecoratedStatus.getStatusDesc() +
                 ", and is operating " +
                 (ServerManager.isOperatingNormally() ? "normally" : " abnormally");
+    }
+
+    @Override
+    protected int getDecorationCost() {
+        return 7;
     }
 
 }

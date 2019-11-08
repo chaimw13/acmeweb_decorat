@@ -12,12 +12,14 @@ public class ExtensionsServerStatus extends ServerStatus {
     StatusResponse undecoratedStatus;
 
     /**
-     * Construct a Status that we can decorate, based on info from the undecorated status
+     * Construct a Status that we can decorate, based on info from the undecorated status.
+     * Accumulate the cost from the undecorated object plus our cost.
      * @param undecoratedStatus a Status that we are to decorate
      */
     public ExtensionsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
+        this.accumulatedCost = undecoratedStatus.accumulatedCost + getDecorationCost();
     }
 
     /**
@@ -29,6 +31,11 @@ public class ExtensionsServerStatus extends ServerStatus {
             return this.undecoratedStatus.getStatusDesc() +
                     ", and is using these extensions - " + ServerManager.getExtensions();
 
+    }
+
+    @Override
+    protected int getDecorationCost() {
+        return 12;
     }
 
 }
