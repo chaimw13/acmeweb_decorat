@@ -1,13 +1,11 @@
 package statusmgr;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import statusmgr.beans.*;
-import statusmgr.beans.decorators.BasicServerStatus;
-import statusmgr.beans.decorators.ExtensionsServerStatus;
-import statusmgr.beans.decorators.MemoryServerStatus;
-import statusmgr.beans.decorators.OperationsServerStatus;
+import statusmgr.beans.decorators.*;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -34,6 +32,12 @@ public class StatusController {
     protected static final String template = "Server Status requested by %s";
     protected final AtomicLong counter = new AtomicLong();
 
+    /**
+     * Accept injection of what factory to use when creating decorators for details
+     */
+    @Autowired
+    DecoratorStyle decoratorStyle;
+
     @RequestMapping("/status")
     public BasicServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
         return new BasicServerStatus(counter.incrementAndGet(),
@@ -57,19 +61,7 @@ public class StatusController {
          * Enhance the status based on the requested details, by successively decorating it with additional classes
          */
         for (String detailtype : detailTypes) {
-            switch (detailtype.toLowerCase()) {
-                case "operations":
-                    sStatus = new OperationsServerStatus(sStatus);
-                    break;
-                case "extensions":
-                    sStatus = new ExtensionsServerStatus(sStatus);
-                    break;
-                case "memory":
-                    sStatus = new MemoryServerStatus(sStatus);
-                    break;
-                default:
-                    throw new BadRequestException("Invalid details option: " + detailtype);
-            }
+            sStatus = decoratorStyle.createDecorator(detailtype, sStatus);
         }
 
         return  sStatus;   // return the most recently created decorated status
