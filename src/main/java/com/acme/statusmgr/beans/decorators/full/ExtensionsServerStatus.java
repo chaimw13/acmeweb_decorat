@@ -1,14 +1,13 @@
-package statusmgr.beans.decorators;
+package com.acme.statusmgr.beans.decorators;
 
-import org.slf4j.Logger;
-import servermgr.ServerManager;
-import statusmgr.beans.ServerStatus;
-import statusmgr.beans.StatusResponse;
+import com.acme.servermgr.ServerManager;
+import com.acme.statusmgr.beans.ServerStatus;
+import com.acme.statusmgr.beans.StatusResponse;
 
 /**
- * A POJO that decorates a Server Status with Memory information.
+ * A POJO that decorates a Server Status with Extension information.
  */
-public class MemoryServerStatus extends ServerStatus {
+public class ExtensionsServerStatus extends ServerStatus {
 
     /**
      * Reference to the status that is not yet decorated.
@@ -16,11 +15,11 @@ public class MemoryServerStatus extends ServerStatus {
     StatusResponse undecoratedStatus;
 
     /**
-     * Construct a Status that we can decorate, based on info from the undecorated status
+     * Construct a Status that we can decorate, based on info from the undecorated status.
      * Accumulate the cost from the undecorated object plus our cost.
      * @param undecoratedStatus a Status that we are to decorate
      */
-    public MemoryServerStatus(ServerStatus undecoratedStatus) {
+    public ExtensionsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
         this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
@@ -32,15 +31,14 @@ public class MemoryServerStatus extends ServerStatus {
      */
     @Override
     public String getStatusDesc() {
-        LOGGER.info("This - {} - is the original StatusDesc before Memory decoration", this.undecoratedStatus.getStatusDesc());
+            return this.undecoratedStatus.getStatusDesc() +
+                    ", and is using these extensions - " + ServerManager.getExtensions();
 
-        return this.undecoratedStatus.getStatusDesc() +
-                ", and its memory is " + ServerManager.getMemoryStatus();
     }
 
     @Override
     protected int getDecorationCost() {
-        return 5;
+        return 12;
     }
 
 }

@@ -1,9 +1,9 @@
-package statusmgr.beans.decorators;
+package com.acme.statusmgr.beans.decorators;
 
 import org.springframework.stereotype.Service;
-import statusmgr.BadRequestException;
-import statusmgr.beans.DecoratorStyle;
-import statusmgr.beans.ServerStatus;
+import com.acme.statusmgr.BadRequestException;
+import com.acme.statusmgr.beans.DecoratorStyle;
+import com.acme.statusmgr.beans.ServerStatus;
 
 /**
  * A factory for creating decorators that provide the full amount of available status information,

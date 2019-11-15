@@ -1,13 +1,13 @@
-package statusmgr.beans.decorators;
+package com.acme.statusmgr.beans.decorators;
 
-import servermgr.ServerManager;
-import statusmgr.beans.ServerStatus;
-import statusmgr.beans.StatusResponse;
+import com.acme.servermgr.ServerManager;
+import com.acme.statusmgr.beans.ServerStatus;
+import com.acme.statusmgr.beans.StatusResponse;
 
 /**
- * A POJO that decorates a Server Status with Operational status information.
+ * A POJO that decorates a Server Status with Memory information.
  */
-public class OperationsServerStatus extends ServerStatus {
+public class MemoryServerStatus extends ServerStatus {
 
     /**
      * Reference to the status that is not yet decorated.
@@ -19,7 +19,7 @@ public class OperationsServerStatus extends ServerStatus {
      * Accumulate the cost from the undecorated object plus our cost.
      * @param undecoratedStatus a Status that we are to decorate
      */
-    public OperationsServerStatus(ServerStatus undecoratedStatus) {
+    public MemoryServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
         this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
@@ -31,14 +31,15 @@ public class OperationsServerStatus extends ServerStatus {
      */
     @Override
     public String getStatusDesc() {
+        LOGGER.info("This - {} - is the original StatusDesc before Memory decoration", this.undecoratedStatus.getStatusDesc());
+
         return this.undecoratedStatus.getStatusDesc() +
-                ", and is operating " +
-                (ServerManager.isOperatingNormally() ? "normally" : " abnormally");
+                ", and its memory is " + ServerManager.getMemoryStatus();
     }
 
     @Override
     protected int getDecorationCost() {
-        return 7;
+        return 5;
     }
 
 }
