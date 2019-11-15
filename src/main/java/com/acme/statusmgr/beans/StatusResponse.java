@@ -1,4 +1,4 @@
-package statusmgr.beans;
+package com.acme.statusmgr.beans;
 
 /**
  * Defines the basic contract for returning status of any item managed by the Acme server, such

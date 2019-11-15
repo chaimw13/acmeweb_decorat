@@ -1,4 +1,4 @@
-package servermgr;
+package com.acme.servermgr;
 
 /**
  * Manage all servers (service providers) being tracked by the Acme server tracking system

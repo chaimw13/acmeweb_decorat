@@ -1,8 +1,9 @@
-package com.acme.statusmgr.beans.decorators;
+package com.acme.statusmgr.beans.decorators.full;
 
+import com.acme.statusmgr.beans.DecoratorStyle;
 import org.springframework.stereotype.Service;
 import com.acme.statusmgr.BadRequestException;
-import com.acme.statusmgr.beans.DecoratorStyle;
+
 import com.acme.statusmgr.beans.ServerStatus;
 
 /**
