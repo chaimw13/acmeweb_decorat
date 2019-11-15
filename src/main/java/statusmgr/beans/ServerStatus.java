@@ -1,10 +1,14 @@
 package statusmgr.beans;
 
+import org.slf4j.*;
+import java.lang.invoke.MethodHandles;
+
 /**
  * Declare how a general Server Status return object should behave and what it must keep track of.
  * Items that concrete classes must provide are defined here as abstract methods.
  */
 public abstract class ServerStatus implements StatusResponse {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     protected long id;
     protected String contentHeader;

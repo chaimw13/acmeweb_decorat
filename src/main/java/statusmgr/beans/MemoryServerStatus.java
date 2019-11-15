@@ -1,5 +1,6 @@
 package statusmgr.beans;
 
+import org.slf4j.Logger;
 import servermgr.ServerManager;
 
 /**
@@ -29,6 +30,8 @@ public class MemoryServerStatus extends ServerStatus {
      */
     @Override
     public String getStatusDesc() {
+        LOGGER.info("This - {} - is the original StatusDesc before Memory decoration", this.undecoratedStatus.getStatusDesc());
+
         return this.undecoratedStatus.getStatusDesc() +
                 ", and its memory is " + ServerManager.getMemoryStatus();
     }
