@@ -1,6 +1,9 @@
-package statusmgr.beans;
+package statusmgr.beans.decorators;
 
 import servermgr.ServerManager;
+import statusmgr.beans.ServerStatus;
+import statusmgr.beans.StatusResponse;
+
 /**
  * A POJO that decorates a Server Status with Extension information.
  */
@@ -19,7 +22,7 @@ public class ExtensionsServerStatus extends ServerStatus {
     public ExtensionsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
-        this.accumulatedCost = undecoratedStatus.accumulatedCost + getDecorationCost();
+        this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
     }
 
     /**

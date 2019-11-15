@@ -1,6 +1,8 @@
-package statusmgr.beans;
+package statusmgr.beans.decorators;
 
 import servermgr.ServerManager;
+import statusmgr.beans.ServerStatus;
+import statusmgr.beans.StatusResponse;
 
 /**
  * A POJO that decorates a Server Status with Operational status information.
@@ -20,7 +22,7 @@ public class OperationsServerStatus extends ServerStatus {
     public OperationsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
-        this.accumulatedCost = undecoratedStatus.accumulatedCost + getDecorationCost();
+        this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
     }
 
     /**
