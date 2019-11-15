@@ -1,7 +1,7 @@
-package statusmgr.beans.decorators;
+package com.acme.statusmgr.beans.decorators;
 
-import servermgr.ServerManager;
-import statusmgr.beans.ServerStatus;
+import com.acme.servermgr.ServerManager;
+import com.acme.statusmgr.beans.ServerStatus;
 
 /**
  * A POJO that represents the most basic Server Status and can be used to generate JSON for that status

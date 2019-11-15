@@ -1,13 +1,13 @@
-package statusmgr.beans.decorators;
+package com.acme.statusmgr.beans.decorators;
 
-import servermgr.ServerManager;
-import statusmgr.beans.ServerStatus;
-import statusmgr.beans.StatusResponse;
+import com.acme.servermgr.ServerManager;
+import com.acme.statusmgr.beans.ServerStatus;
+import com.acme.statusmgr.beans.StatusResponse;
 
 /**
- * A POJO that decorates a Server Status with Extension information.
+ * A POJO that decorates a Server Status with Operational status information.
  */
-public class ExtensionsServerStatus extends ServerStatus {
+public class OperationsServerStatus extends ServerStatus {
 
     /**
      * Reference to the status that is not yet decorated.
@@ -15,11 +15,11 @@ public class ExtensionsServerStatus extends ServerStatus {
     StatusResponse undecoratedStatus;
 
     /**
-     * Construct a Status that we can decorate, based on info from the undecorated status.
+     * Construct a Status that we can decorate, based on info from the undecorated status
      * Accumulate the cost from the undecorated object plus our cost.
      * @param undecoratedStatus a Status that we are to decorate
      */
-    public ExtensionsServerStatus(ServerStatus undecoratedStatus) {
+    public OperationsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
         this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
@@ -31,14 +31,14 @@ public class ExtensionsServerStatus extends ServerStatus {
      */
     @Override
     public String getStatusDesc() {
-            return this.undecoratedStatus.getStatusDesc() +
-                    ", and is using these extensions - " + ServerManager.getExtensions();
-
+        return this.undecoratedStatus.getStatusDesc() +
+                ", and is operating " +
+                (ServerManager.isOperatingNormally() ? "normally" : " abnormally");
     }
 
     @Override
     protected int getDecorationCost() {
-        return 12;
+        return 7;
     }
 
 }
