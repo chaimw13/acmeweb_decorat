@@ -1,4 +1,4 @@
-package statusmgr.beans;
+package com.acme.statusmgr.beans;
 
 import org.slf4j.*;
 import java.lang.invoke.MethodHandles;

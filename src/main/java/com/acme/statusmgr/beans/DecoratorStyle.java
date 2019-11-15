@@ -1,4 +1,4 @@
-package statusmgr.beans;
+package com.acme.statusmgr.beans;
 
 /**
  * Define interface to use for referencing Factories that create status decorators

@@ -1,4 +1,4 @@
-package statusmgr;
+package com.acme.statusmgr;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
