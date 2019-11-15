@@ -4,6 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import statusmgr.beans.*;
+import statusmgr.beans.decorators.BasicServerStatus;
+import statusmgr.beans.decorators.ExtensionsServerStatus;
+import statusmgr.beans.decorators.MemoryServerStatus;
+import statusmgr.beans.decorators.OperationsServerStatus;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;

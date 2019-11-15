@@ -12,6 +12,11 @@ public abstract class ServerStatus implements StatusResponse {
 
     protected long id;
     protected String contentHeader;
+
+    public long getAccumulatedCost() {
+        return accumulatedCost;
+    }
+
     protected long accumulatedCost = 0;     // Keep track of all costs to prepare this status
 
     /**

@@ -1,7 +1,9 @@
-package statusmgr.beans;
+package statusmgr.beans.decorators;
 
 import org.slf4j.Logger;
 import servermgr.ServerManager;
+import statusmgr.beans.ServerStatus;
+import statusmgr.beans.StatusResponse;
 
 /**
  * A POJO that decorates a Server Status with Memory information.
@@ -21,7 +23,7 @@ public class MemoryServerStatus extends ServerStatus {
     public MemoryServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
-        this.accumulatedCost = undecoratedStatus.accumulatedCost + getDecorationCost();
+        this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
     }
 
     /**
