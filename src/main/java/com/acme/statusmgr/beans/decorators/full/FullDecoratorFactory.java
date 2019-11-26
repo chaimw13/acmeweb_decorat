@@ -1,6 +1,7 @@
 package com.acme.statusmgr.beans.decorators.full;
 
 import com.acme.statusmgr.beans.DecoratorStyle;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import com.acme.statusmgr.BadRequestException;
 
@@ -11,6 +12,7 @@ import com.acme.statusmgr.beans.ServerStatus;
  * without removing any internal fields and without doing any localization of content.
  */
 @Service
+@Primary
 public class FullDecoratorFactory implements DecoratorStyle {
     @Override
     public ServerStatus createDecorator(String detailtype, ServerStatus undecoratedStatus) {
