@@ -27,6 +27,7 @@ public abstract class ServerStatus implements StatusResponse {
     public ServerStatus(long id, String contentHeader) {
         this.id = id;
         this.contentHeader = contentHeader;
+        LOGGER.info("Constructed a ServerStatus obj for {}", this.contentHeader);
     }
 
 
