@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
  * without removing any internal fields and without doing any localization of content.
  */
 @Service
-@Primary
 public class FriendlyDecoratorFactory implements DecoratorStyle {
     @Override
     public ServerStatus createDecorator(String detailtype, ServerStatus undecoratedStatus) {
