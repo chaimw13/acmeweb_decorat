@@ -43,52 +43,52 @@ public class ServerStatusDetailedControllerTests {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturn_Basic_Ext() throws Exception {
+    public void MIKEshouldReturn_Basic_Ext() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Extensions")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/server/status/detailed?details=extensions")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is using these extensions - [Hypervisor, Kubernetes, RAID-6]"));
     }
 
     @Test
-    public void shouldReturn_Basic_Mem() throws Exception {
+    public void MIKEshouldReturn_Basic_Mem() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Memory")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/server/status/detailed?details=memory")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and its memory is Running low"));
     }
 
     @Test
-    public void shouldReturn_Basic_Op() throws Exception {
+    public void MIKEshouldReturn_Basic_Op() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Operations")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/server/status/detailed?details=operations")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is operating normally"));
     }
 
     @Test
-    public void shouldReturn_Basic_Mem_Op() throws Exception {
+    public void MIKEshouldReturn_Basic_Mem_Op() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Memory,Operations")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/server/status/detailed?details=memory,operations")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and its memory is Running low, and is operating normally"));
     }
 
     @Test
-    public void shouldReturn_Basic_MemExt() throws Exception {
+    public void MIKEshouldReturn_Basic_MemExt() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Memory,Extensions")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/server/status/detailed?details=memory,extensions")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and its memory is Running low, and is using these extensions - [Hypervisor, Kubernetes, RAID-6]"));
     }
 
     @Test
-    public void shouldReturn_Basic_Op_Ext_Mem() throws Exception {
+    public void MIKEshouldReturn_Basic_Op_Ext_Mem() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Operations,Extensions,Memory")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/server/status/detailed?details=operations,extensions,memory")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"));
     }
 
 
     @Test
-    public void withParamShouldReturnTailored_Basic_Op_Ext_Mem() throws Exception {
+    public void MIKEwithParamShouldReturnTailored_Basic_Op_Ext_Mem() throws Exception {
 
-        this.mockMvc.perform(get("/server/status/detailed?details=Operations,Extensions,Memory").param("name", "RebYid"))
+        this.mockMvc.perform(get("/server/status/detailed?details=operations,extensions,memory").param("name", "RebYid"))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.contentHeader").value("Server Status requested by RebYid"))
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"));
@@ -96,7 +96,7 @@ public class ServerStatusDetailedControllerTests {
 
 
     @Test
-    public void withoutDetailsShouldReturnErrorBadRequest() throws Exception {
+    public void MIKEwithoutDetailsShouldReturnErrorBadRequest() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed")).andDo(print()).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.statusDesc").doesNotExist())
@@ -104,7 +104,7 @@ public class ServerStatusDetailedControllerTests {
     }
 
     @Test
-    public void withInvalidDetailsShouldReturnErrorBadRequest() throws Exception {
+    public void MIKEwithInvalidDetailsShouldReturnErrorBadRequest() throws Exception {
 
 
 
@@ -118,4 +118,8 @@ public class ServerStatusDetailedControllerTests {
 
     }
 
+
+
+
+    ////   BEGIN student tests
 }
