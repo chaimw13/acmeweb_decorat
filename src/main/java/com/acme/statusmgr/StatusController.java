@@ -3,6 +3,8 @@ package com.acme.statusmgr;
 import com.acme.statusmgr.beans.*;
 
 import com.acme.statusmgr.beans.decorators.full.BasicServerStatus;
+import com.acme.statusmgr.commands.*;
+import com.acme.statusmgr.executors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,8 +43,10 @@ public class StatusController {
 
     @RequestMapping("/status")
     public BasicServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
-        return new BasicServerStatus(counter.incrementAndGet(),
-                String.format(template, name));
+        BasicServerStatusCmd cmd = new BasicServerStatusCmd(counter.incrementAndGet(), template, name);
+        SerialExecutor exc = new SerialExecutor(cmd);
+        exc.handleImmidiatly();
+        return cmd.getResult();
     }
 
     /**
