@@ -13,7 +13,7 @@ public class DiskManager {
     // Disk command to be used to check disk status
     // This example is for windows- chkdsk on the C drive. For unix use {"du", "-c", "d1", "/"}
 //    private final static String[] diskCommand = new String[]{"chkdsk", "c:"};
-    private final static String[] diskCommand = new String[]{"cmd", "/C", "Dir", "/S", "C:*.java"};
+    private final static String[] diskCommand = new String[]{"cmd", "/C", "Dir", "/S", "C:\\*.java"};
 
     /**
      * Get the disk command that is being used to check disk status
