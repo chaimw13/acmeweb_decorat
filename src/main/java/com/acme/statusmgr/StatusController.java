@@ -1,5 +1,6 @@
 package com.acme.statusmgr;
 
+import com.acme.diskmgr.DiskManager;
 import com.acme.statusmgr.beans.*;
 
 import com.acme.statusmgr.beans.decorators.full.BasicServerStatus;
@@ -65,5 +66,26 @@ public class StatusController {
         exc.handleImmidiatly();
         return cmd.getResult();
     }
+
+
+    /**
+     * Handle request for disk status
+     * @param name          optional URL param with default for name of executor
+     * @return a DiskStatus object with info about disk that will be converted to JSON
+     */
+    @RequestMapping(value = "/disk/status", produces = {"application/json"})
+    public DiskStatus getDiskStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
+
+        // Start off with creating a basic status object by calling the usual creator of that
+        DiskStatus dStatus = new DiskStatus (counter.incrementAndGet(), String.format(template, name));
+
+        // Create a DiskManager object, and ask it to run the disk status command, get its output
+        DiskManager dMgr = new DiskManager();
+        dStatus.setDiskCommand(dMgr.getDiskCommand());
+        dStatus.setDiskCommandOutput(dMgr.getDiskCommandOutput());
+
+        return  dStatus;   // return the disk status object, which will be converted by Spring, e.g. into JSON
+    }
+
 
 }
