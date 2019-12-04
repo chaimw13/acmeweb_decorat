@@ -59,17 +59,11 @@ public class StatusController {
     public StatusResponse getDetailedStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name,
                                             @RequestParam(value = "details") List<String> detailTypes) {
 
-        // Start off with creating a basic status object by calling the usual creator of that
-        ServerStatus sStatus = getStatus(name);
-
-        /**
-         * Enhance the status based on the requested details, by successively decorating it with additional classes
-         */
-        for (String detailtype : detailTypes) {
-            sStatus = decoratorStyle.createDecorator(detailtype, sStatus);
-        }
-
-        return  sStatus;   // return the most recently created decorated status
+        DetailedServerStatusCmd cmd = new DetailedServerStatusCmd(counter.incrementAndGet(),
+                template, name, detailTypes, decoratorStyle);
+        SerialExecutor exc = new SerialExecutor(cmd);
+        exc.handleImmidiatly();
+        return cmd.getResult();
     }
 
 }
