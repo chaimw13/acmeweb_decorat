@@ -2,7 +2,6 @@ package com.acme.statusmgr.beans.decorators.friendly;
 
 import com.acme.servermgr.ServerManager;
 import com.acme.statusmgr.beans.ServerStatus;
-import com.acme.statusmgr.beans.StatusResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -14,7 +13,7 @@ public class OperationsServerStatus extends ServerStatus {
     /**
      * Reference to the status that is not yet decorated.
      */
-    StatusResponse undecoratedStatus;
+    ServerStatus undecoratedStatus;
 
     /**
      * Construct a Status that we can decorate, based on info from the undecorated status
@@ -32,8 +31,8 @@ public class OperationsServerStatus extends ServerStatus {
      * @return a String that contains previously generated status, with addition of our decoration
      */
     @Override
-    public String getStatusDesc() {
-        return this.undecoratedStatus.getStatusDesc() +
+    public String generateStatusDesc() {
+        return this.undecoratedStatus.generateStatusDesc() +
                 ", and is operating " +
                 (ServerManager.isOperatingNormally() ? "normally" : " abnormally");
     }

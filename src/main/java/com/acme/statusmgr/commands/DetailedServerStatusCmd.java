@@ -47,6 +47,7 @@ public class DetailedServerStatusCmd extends StatusCommand implements Executable
             result = decoratorStyle.createDecorator(detailtype, result);
         }
 
+        result.setStatusDesc(result.generateStatusDesc());
         this.cmdState = CmdState.COMPLETED;
     }
 

@@ -22,7 +22,7 @@ public class BasicServerStatus extends ServerStatus {
         this.accumulatedCost = getDecorationCost(); // set it to our cost, the most basic cost.
     }
 
-    public String getStatusDesc() {
+    public String generateStatusDesc() {
         // just get the basic status info
         String statusStr = ServerManager.getCurrentServerStatus();
         return statusStr;

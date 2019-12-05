@@ -12,6 +12,7 @@ public abstract class ServerStatus implements StatusResponse {
 
     protected long id;
     protected String contentHeader;
+    private String statusDesc;
 
     public long getAccumulatedCost() {
         return accumulatedCost;
@@ -53,8 +54,7 @@ public abstract class ServerStatus implements StatusResponse {
      * Status description to be obtained/modified and returned by the concrete class
      * @return A String describing the status of the server, possibly decorated by multiple concrete classes.
      */
-    @Override
-    public abstract String getStatusDesc();
+    public abstract String generateStatusDesc();
 
 
     // New items for cost
@@ -71,5 +71,14 @@ public abstract class ServerStatus implements StatusResponse {
      */
     public long getTotalRequestCost() {
         return this.accumulatedCost;
+    }
+
+    @Override
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
     }
 }

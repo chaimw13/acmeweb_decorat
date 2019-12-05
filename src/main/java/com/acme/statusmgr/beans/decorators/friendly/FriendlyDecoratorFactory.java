@@ -3,7 +3,6 @@ package com.acme.statusmgr.beans.decorators.friendly;
 import com.acme.statusmgr.BadRequestException;
 import com.acme.statusmgr.beans.DecoratorStyle;
 import com.acme.statusmgr.beans.ServerStatus;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 /**

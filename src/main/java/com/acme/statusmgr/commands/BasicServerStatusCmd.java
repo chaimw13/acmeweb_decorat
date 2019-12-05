@@ -20,6 +20,7 @@ public class BasicServerStatusCmd  extends StatusCommand   implements Executable
     public void execute() {
         this.cmdState = CmdState.INPROGRESS;
         result = new BasicServerStatus(cmdId, String.format(template, requestorName));
+        result.setStatusDesc(result.generateStatusDesc());
         this.cmdState = CmdState.COMPLETED;
     }
 
