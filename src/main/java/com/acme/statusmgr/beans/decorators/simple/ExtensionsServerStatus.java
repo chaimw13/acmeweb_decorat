@@ -1,31 +1,40 @@
-package com.acme.statusmgr.beans.decorators.friendly;
+package com.acme.statusmgr.beans.decorators.simple;
 
 import com.acme.servermgr.ServerManager;
 import com.acme.statusmgr.beans.ServerStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-
 /**
- * A POJO that represents the most basic Server Status and can be used to generate JSON for that status
+ * A POJO that decorates a Server Status with Extension information.
  */
 @JsonInclude(JsonInclude.Include.NON_DEFAULT) // Friendly: only include when values are set.
-public class BasicServerStatus extends ServerStatus {
+public class ExtensionsServerStatus extends ServerStatus {
 
     /**
-     * Construct a ServerStatus using info passed in about the request
-     *
-     * @param id            a numeric identifier/counter of which request this is
-     * @param contentHeader info about the request
+     * Reference to the status that is not yet decorated.
      */
-    public BasicServerStatus(long id, String contentHeader) {
-        super(id, contentHeader);
-        this.accumulatedCost = getDecorationCost(); // set it to our cost, the most basic cost.
+    ServerStatus undecoratedStatus;
+
+    /**
+     * Construct a Status that we can decorate, based on info from the undecorated status.
+     * Accumulate the cost from the undecorated object plus our cost.
+     * @param undecoratedStatus a Status that we are to decorate
+     */
+    public ExtensionsServerStatus(ServerStatus undecoratedStatus) {
+        super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
+        this.undecoratedStatus = undecoratedStatus;
+        this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
     }
 
+    /**
+     * Decorate our status by adding more information to the undecorated status
+     * @return a String that contains previously generated status, with addition of our decoration
+     */
+    @Override
     public String generateStatusDesc() {
-        // just get the basic status info
-        String statusStr = ServerManager.getCurrentServerStatus();
-        return statusStr;
+            return this.undecoratedStatus.generateStatusDesc() +
+                    ", and is using these extensions - " + ServerManager.getExtensions();
+
     }
 
     @Override

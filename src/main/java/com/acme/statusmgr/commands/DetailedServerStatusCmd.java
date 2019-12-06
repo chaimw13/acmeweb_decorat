@@ -2,7 +2,7 @@ package com.acme.statusmgr.commands;
 
 import com.acme.statusmgr.beans.DecoratorStyle;
 import com.acme.statusmgr.beans.ServerStatus;
-import com.acme.statusmgr.beans.decorators.full.BasicServerStatus;
+import com.acme.statusmgr.beans.decorators.complex.BasicServerStatus;
 
 import java.util.List;
 

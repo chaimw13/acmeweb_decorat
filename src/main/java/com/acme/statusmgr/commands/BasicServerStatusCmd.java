@@ -1,6 +1,6 @@
 package com.acme.statusmgr.commands;
 
-import com.acme.statusmgr.beans.decorators.full.BasicServerStatus;
+import com.acme.statusmgr.beans.decorators.complex.BasicServerStatus;
 
 /**
  * Command for handling Basic ServerStatus (e.g. "Server is up")

@@ -1,12 +1,12 @@
-package com.acme.statusmgr.beans.decorators.full;
+package com.acme.statusmgr.beans.decorators.complex;
 
 import com.acme.servermgr.ServerManager;
 import com.acme.statusmgr.beans.ServerStatus;
 
 /**
- * A POJO that decorates a Server Status with Operational status information.
+ * A POJO that decorates a Server Status with Extension information.
  */
-public class OperationsServerStatus extends ServerStatus {
+public class ExtensionsServerStatus extends ServerStatus {
 
     /**
      * Reference to the status that is not yet decorated.
@@ -14,11 +14,11 @@ public class OperationsServerStatus extends ServerStatus {
     ServerStatus undecoratedStatus;
 
     /**
-     * Construct a Status that we can decorate, based on info from the undecorated status
+     * Construct a Status that we can decorate, based on info from the undecorated status.
      * Accumulate the cost from the undecorated object plus our cost.
      * @param undecoratedStatus a Status that we are to decorate
      */
-    public OperationsServerStatus(ServerStatus undecoratedStatus) {
+    public ExtensionsServerStatus(ServerStatus undecoratedStatus) {
         super(undecoratedStatus.getId(), undecoratedStatus.getContentHeader());
         this.undecoratedStatus = undecoratedStatus;
         this.accumulatedCost = undecoratedStatus.getAccumulatedCost() + getDecorationCost();
@@ -30,14 +30,14 @@ public class OperationsServerStatus extends ServerStatus {
      */
     @Override
     public String generateStatusDesc() {
-        return this.undecoratedStatus.generateStatusDesc() +
-                ", and is operating " +
-                (ServerManager.isOperatingNormally() ? "normally" : " abnormally");
+            return this.undecoratedStatus.generateStatusDesc() +
+                    ", and is using these extensions - " + ServerManager.getExtensions();
+
     }
 
     @Override
     protected int getDecorationCost() {
-        return 7;
+        return 12;
     }
 
 }

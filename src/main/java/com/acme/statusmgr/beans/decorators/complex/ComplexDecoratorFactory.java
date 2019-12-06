@@ -1,4 +1,4 @@
-package com.acme.statusmgr.beans.decorators.full;
+package com.acme.statusmgr.beans.decorators.complex;
 
 import com.acme.statusmgr.beans.DecoratorStyle;
 import org.springframework.context.annotation.Primary;
@@ -13,7 +13,7 @@ import com.acme.statusmgr.beans.ServerStatus;
  */
 @Service
 @Primary
-public class FullDecoratorFactory implements DecoratorStyle {
+public class ComplexDecoratorFactory implements DecoratorStyle {
     @Override
     public ServerStatus createDecorator(String detailtype, ServerStatus undecoratedStatus) {
         ServerStatus newDecorator;

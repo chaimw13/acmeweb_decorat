@@ -1,11 +1,17 @@
 package com.acme.statusmgr;
 
 import com.acme.diskmgr.DiskManager;
-import com.acme.statusmgr.beans.*;
 
-import com.acme.statusmgr.beans.decorators.full.BasicServerStatus;
 import com.acme.statusmgr.commands.*;
 import com.acme.statusmgr.executors.*;
+import com.acme.statusmgr.beans.DecoratorStyle;
+import com.acme.statusmgr.beans.DiskStatus;
+import com.acme.statusmgr.beans.ServerStatus;
+import com.acme.statusmgr.beans.StatusResponse;
+import com.acme.statusmgr.beans.decorators.complex.BasicServerStatus;
+import com.acme.statusmgr.beans.decorators.complex.ComplexDecoratorFactory;
+import com.acme.statusmgr.beans.decorators.simple.SimpleDecoratorFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +46,7 @@ public class StatusController {
      * Accept injection of what factory to use when creating decorators for details
      */
     @Autowired
-    DecoratorStyle decoratorStyle;
+    DecoratorStyle defaultDecoratorStyle;
 
     @RequestMapping("/status")
     public BasicServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
@@ -58,8 +64,13 @@ public class StatusController {
      */
     @RequestMapping(value = "/status/detailed", produces = {"application/json"})
     public StatusResponse getDetailedStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name,
-                                            @RequestParam(value = "details") List<String> detailTypes) {
+                                            @RequestParam(value = "details") List<String> detailTypes,
+                                            @RequestParam(value = "levelofdetail", defaultValue = "&DEFAULT") String detailLevel) {
 
+        DecoratorStyle decoratorStyle =
+                detailLevel.equalsIgnoreCase("simple") ? new SimpleDecoratorFactory() :
+                        detailLevel.equalsIgnoreCase("complex") ? new ComplexDecoratorFactory() :
+                                defaultDecoratorStyle;
         DetailedServerStatusCmd cmd = new DetailedServerStatusCmd(counter.incrementAndGet(),
                 template, name, detailTypes, decoratorStyle);
         SerialExecutor exc = new SerialExecutor(cmd);
