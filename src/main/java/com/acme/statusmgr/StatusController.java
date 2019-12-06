@@ -1,6 +1,9 @@
 package com.acme.statusmgr;
 
 import com.acme.diskmgr.DiskManager;
+
+import com.acme.statusmgr.commands.*;
+import com.acme.statusmgr.executors.*;
 import com.acme.statusmgr.beans.DecoratorStyle;
 import com.acme.statusmgr.beans.DiskStatus;
 import com.acme.statusmgr.beans.ServerStatus;
@@ -8,6 +11,7 @@ import com.acme.statusmgr.beans.StatusResponse;
 import com.acme.statusmgr.beans.decorators.complex.BasicServerStatus;
 import com.acme.statusmgr.beans.decorators.complex.ComplexDecoratorFactory;
 import com.acme.statusmgr.beans.decorators.simple.SimpleDecoratorFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,8 +50,10 @@ public class StatusController {
 
     @RequestMapping("/status")
     public BasicServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
-        return new BasicServerStatus(counter.incrementAndGet(),
-                String.format(template, name));
+        BasicServerStatusCmd cmd = new BasicServerStatusCmd(counter.incrementAndGet(), template, name);
+        SerialExecutor exc = new SerialExecutor(cmd);
+        exc.handleImmidiatly();
+        return cmd.getResult();
     }
 
     /**
@@ -61,27 +67,15 @@ public class StatusController {
                                             @RequestParam(value = "details") List<String> detailTypes,
                                             @RequestParam(value = "levelofdetail", defaultValue = "&DEFAULT") String detailLevel) {
 
-        // Start off with creating a basic status object by calling the usual creator of that
-        ServerStatus sStatus = getStatus(name);
-
-        if (detailLevel.equalsIgnoreCase("simple"))
-            defaultDecoratorStyle = new SimpleDecoratorFactory();
-
-
         DecoratorStyle decoratorStyle =
                 detailLevel.equalsIgnoreCase("simple") ? new SimpleDecoratorFactory() :
                         detailLevel.equalsIgnoreCase("complex") ? new ComplexDecoratorFactory() :
                                 defaultDecoratorStyle;
-
-
-        /**
-         * Enhance the status based on the requested details, by successively decorating it with additional classes
-         */
-        for (String detailtype : detailTypes) {
-            sStatus = decoratorStyle.createDecorator(detailtype, sStatus);
-        }
-
-        return  sStatus;   // return the most recently created decorated status
+        DetailedServerStatusCmd cmd = new DetailedServerStatusCmd(counter.incrementAndGet(),
+                template, name, detailTypes, decoratorStyle);
+        SerialExecutor exc = new SerialExecutor(cmd);
+        exc.handleImmidiatly();
+        return cmd.getResult();
     }
 
 

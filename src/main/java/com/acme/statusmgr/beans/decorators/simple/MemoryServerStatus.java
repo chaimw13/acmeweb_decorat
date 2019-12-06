@@ -2,7 +2,6 @@ package com.acme.statusmgr.beans.decorators.simple;
 
 import com.acme.servermgr.ServerManager;
 import com.acme.statusmgr.beans.ServerStatus;
-import com.acme.statusmgr.beans.StatusResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -14,7 +13,7 @@ public class MemoryServerStatus extends ServerStatus {
     /**
      * Reference to the status that is not yet decorated.
      */
-    StatusResponse undecoratedStatus;
+    ServerStatus undecoratedStatus;
 
     /**
      * Construct a Status that we can decorate, based on info from the undecorated status
@@ -32,10 +31,10 @@ public class MemoryServerStatus extends ServerStatus {
      * @return a String that contains previously generated status, with addition of our decoration
      */
     @Override
-    public String getStatusDesc() {
-        LOGGER.info("This - {} - is the original StatusDesc before Memory decoration", this.undecoratedStatus.getStatusDesc());
+    public String generateStatusDesc() {
+        LOGGER.info("This - {} - is the original StatusDesc before Memory decoration", this.undecoratedStatus.generateStatusDesc());
 
-        return this.undecoratedStatus.getStatusDesc() +
+        return this.undecoratedStatus.generateStatusDesc() +
                 ", and its memory is " + ServerManager.getMemoryStatus();
     }
 
