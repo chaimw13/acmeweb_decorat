@@ -26,8 +26,21 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testCompile('org.junit.jupiter:junit-jupiter-params')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
+    testCompile "org.mockito:mockito-core:"
+    testCompile('org.mockito:mockito-junit-jupiter')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.jayway.jsonpath:json-path')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 

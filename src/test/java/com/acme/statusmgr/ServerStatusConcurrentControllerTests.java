@@ -15,116 +15,132 @@
  */
 package com.acme.statusmgr;
 
-import org.assertj.core.api.AssertJProxySetup;
-import org.junit.Assert;
-
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import org.junit.jupiter.api.parallel.Execution;
 import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.concurrent.atomic.AtomicLong;
 
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
+/**
+ * Concurrency/performance test that runs 6 tests repeatedly and concurrently, and measures
+ * and prints out throughput in terms of requests handled per second.
+  */
 @RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ServerStatusDetailedControllerTests {
+@Execution(CONCURRENT)
+public class ServerStatusConcurrentControllerTests {
+
+    protected static final Logger LOGGER = LoggerFactory.getLogger("ACMEWEB_PERFORMANCE");
+
+    // How many times to repeat each test
+    final static int numRepeats = 20;
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
+    // counter for total number of requests processes.
+    static final AtomicLong numRequests = new AtomicLong();
+
+    // Remember start time for response time calculation
+    static final AtomicLong startTime = new AtomicLong();
+
+
+    /**
+     * Set up for transaction timing
+     */
+    @BeforeAll     // NOT BeforeEach
+    static void setUpAll() {
+        numRequests.set(0);
+        startTime.set(System.currentTimeMillis());
+    }
+
+    /**
+     * Compute and display transaction timing
+     */
+    @AfterAll
+    static void tearDownAll() {
+        long execTime = System.currentTimeMillis() - startTime.get();
+
+        LOGGER.info("Executed {} requests in {} milliseconds, request rate of {} reqs per millisec",
+                numRequests, execTime, (numRequests.get()  * 1000.0) / execTime);
+    }
+
+
+    @RepeatedTest(numRepeats)
     public void MIKEshouldReturn_Basic_Ext() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed?details=extensions")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is using these extensions - [Hypervisor, Kubernetes, RAID-6]"));
+
+        numRequests.incrementAndGet();
     }
 
-    @Test
+    @RepeatedTest(numRepeats)
     public void MIKEshouldReturn_Basic_Mem() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed?details=memory")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and its memory is Running low"));
+
+        numRequests.incrementAndGet();
     }
 
-    @Test
+    @RepeatedTest(numRepeats)
     public void MIKEshouldReturn_Basic_Op() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed?details=operations")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is operating normally"));
+
+        numRequests.incrementAndGet();
     }
 
-    @Test
+    @RepeatedTest(numRepeats)
     public void MIKEshouldReturn_Basic_Mem_Op() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed?details=memory,operations")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and its memory is Running low, and is operating normally"));
+
+        numRequests.incrementAndGet();
     }
 
-    @Test
+    @RepeatedTest(numRepeats)
     public void MIKEshouldReturn_Basic_MemExt() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed?details=memory,extensions")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and its memory is Running low, and is using these extensions - [Hypervisor, Kubernetes, RAID-6]"));
+
+        numRequests.incrementAndGet();
     }
 
-    @Test
+    @RepeatedTest(numRepeats)
     public void MIKEshouldReturn_Basic_Op_Ext_Mem() throws Exception {
 
         this.mockMvc.perform(get("/server/status/detailed?details=operations,extensions,memory")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusDesc").value("Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"));
-    }
 
-
-    @Test
-    public void MIKEwithParamShouldReturnTailored_Basic_Op_Ext_Mem() throws Exception {
-
-        this.mockMvc.perform(get("/server/status/detailed?details=operations,extensions,memory").param("name", "RebYid"))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.contentHeader").value("Server Status requested by RebYid"))
-                .andExpect(jsonPath("$.statusDesc").value("Server is up, and is operating normally, and is using these extensions - [Hypervisor, Kubernetes, RAID-6], and its memory is Running low"));
-    }
-
-
-    @Test
-    public void MIKEwithoutDetailsShouldReturnErrorBadRequest() throws Exception {
-
-        this.mockMvc.perform(get("/server/status/detailed")).andDo(print()).andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusDesc").doesNotExist())
-                .andExpect(status().reason("Required List parameter 'details' is not present"));
-    }
-
-    @Test
-    public void MIKEwithInvalidDetailsShouldReturnErrorBadRequest() throws Exception {
-
-
-
-        MvcResult result = this.mockMvc.perform(get("/server/status/detailed?details=InvalidDetailOption1")).andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusDesc").doesNotExist())
-                .andReturn();
-
-
-        Assert.assertEquals(result.getResolvedException().getLocalizedMessage(), "Invalid details option: InvalidDetailOption1");
-
+        numRequests.incrementAndGet();
     }
 
 
 
 
-    ////   BEGIN student tests
 }
