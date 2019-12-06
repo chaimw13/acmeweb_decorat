@@ -1,4 +1,4 @@
-package com.acme.statusmgr.beans.decorators.friendly;
+package com.acme.statusmgr.beans.decorators.simple;
 
 import com.acme.servermgr.ServerManager;
 import com.acme.statusmgr.beans.ServerStatus;
