@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 public class DiskManager {
     // Disk command to be used to check disk status
     // This example is for windows- chkdsk on the C drive. For unix use {"du", "-c", "d1", "/"}
-    private final static String[] diskCommand = new String[]{"chkdsk", "c:"};
+//    private final static String[] diskCommand = new String[]{"chkdsk", "c:"};
+    private final static String[] diskCommand = new String[]{"cmd", "/C", "Dir", "/S", "C:\\*.java"};
 
     /**
      * Get the disk command that is being used to check disk status
@@ -36,8 +37,15 @@ public class DiskManager {
             // execute desired command, the command and its params must be in a string array
             Process chkProcess = rt.exec(diskCommand);
             // read output from the command, and collect into a string
-            result = new BufferedReader(new InputStreamReader(chkProcess.getInputStream()))
-                    .lines().collect(Collectors.joining("\n"));
+          //  result = new BufferedReader(new InputStreamReader(chkProcess.getInputStream()))
+            //        .lines().collect(Collectors.joining("\n"));
+
+            BufferedReader rdr = new BufferedReader(new InputStreamReader(chkProcess.getInputStream()));
+            for (String line = rdr.readLine(); line != null; line = rdr.readLine()) {
+                System.out.println(line);
+                result = result + line;
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
