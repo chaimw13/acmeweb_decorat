@@ -50,7 +50,7 @@ public class StatusController {
     /**
      * establish interface variable that points to executor to use (could be injected)
      */
-    static IExecutor executor = new SerialExecutor();
+    static IExecutor executor = new /* SerialExecutor() */    OptimizingExecutor();
 
 
     @RequestMapping("/status")
