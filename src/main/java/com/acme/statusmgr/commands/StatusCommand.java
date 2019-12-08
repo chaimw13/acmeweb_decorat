@@ -23,5 +23,26 @@ abstract class StatusCommand implements ExecutableWebCommands {
         this.cmdState = CmdState.NOTSTARTED;
     }
 
+    /**
+     * get the execution state of command
+     * @return CmdState
+     */
+    public CmdState getCmdState() {
+        return cmdState;
+    }
 
+    /**
+     * set the state of the command
+     * @param cmdState
+     */
+    public void setCmdState(CmdState cmdState) {
+        this.cmdState = cmdState;
+    }
+
+    /**
+     * Require all concrete classes to provide a string representation that fully
+     * and uniquely identified the command so it can be grouped with same commands
+     * @return a String that uniquely identifies command and its relevant parameters
+     */
+    abstract public String toString();
 }

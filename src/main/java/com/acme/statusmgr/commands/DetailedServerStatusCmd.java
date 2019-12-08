@@ -60,4 +60,14 @@ public class DetailedServerStatusCmd extends StatusCommand implements Executable
     public ServerStatus getResult() {
         return result;
     }
+
+    /**
+     * Provide a string representation of this command that is unique across commands
+     * @return String that identifies command
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName()+ ":" + decoratorStyle.getClass().getSimpleName()
+                + detailTypes.toString();
+    }
 }

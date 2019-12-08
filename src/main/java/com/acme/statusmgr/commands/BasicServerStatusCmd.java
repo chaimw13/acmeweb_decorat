@@ -34,4 +34,12 @@ public class BasicServerStatusCmd  extends StatusCommand   implements Executable
     public BasicServerStatus getResult() {
         return result;
     }
+
+    /**
+     * Provide a string representation of this command that is unique across commands
+     * @return String that identifies command
+     */
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

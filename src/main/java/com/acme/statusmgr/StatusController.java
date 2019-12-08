@@ -6,7 +6,6 @@ import com.acme.statusmgr.commands.*;
 import com.acme.statusmgr.executors.*;
 import com.acme.statusmgr.beans.DecoratorStyle;
 import com.acme.statusmgr.beans.DiskStatus;
-import com.acme.statusmgr.beans.ServerStatus;
 import com.acme.statusmgr.beans.StatusResponse;
 import com.acme.statusmgr.beans.decorators.complex.BasicServerStatus;
 import com.acme.statusmgr.beans.decorators.complex.ComplexDecoratorFactory;
@@ -48,11 +47,16 @@ public class StatusController {
     @Autowired
     DecoratorStyle defaultDecoratorStyle;
 
+    /**
+     * establish interface variable that points to executor to use (could be injected)
+     */
+    static IExecutor executor = new SerialExecutor();
+
+
     @RequestMapping("/status")
     public BasicServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
         BasicServerStatusCmd cmd = new BasicServerStatusCmd(counter.incrementAndGet(), template, name);
-        SerialExecutor exc = new SerialExecutor(cmd);
-        exc.handleImmidiatly();
+        executor.handleCommand(cmd);
         return cmd.getResult();
     }
 
@@ -73,8 +77,8 @@ public class StatusController {
                                 defaultDecoratorStyle;
         DetailedServerStatusCmd cmd = new DetailedServerStatusCmd(counter.incrementAndGet(),
                 template, name, detailTypes, decoratorStyle);
-        SerialExecutor exc = new SerialExecutor(cmd);
-        exc.handleImmidiatly();
+
+        executor.handleCommand(cmd);
         return cmd.getResult();
     }
 
@@ -83,6 +87,8 @@ public class StatusController {
      * Handle request for disk status
      * @param name          optional URL param with default for name of executor
      * @return a DiskStatus object with info about disk that will be converted to JSON
+     *
+     * TODO does not yet follow Command Pattern. Ignore for now
      */
     @RequestMapping(value = "/disk/status", produces = {"application/json"})
     public DiskStatus getDiskStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
