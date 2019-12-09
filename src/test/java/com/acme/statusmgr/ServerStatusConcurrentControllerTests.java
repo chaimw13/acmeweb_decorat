@@ -81,7 +81,7 @@ public class ServerStatusConcurrentControllerTests {
     static void tearDownAll() {
         long execTime = System.currentTimeMillis() - startTime.get();
 
-        LOGGER.info("Executed {} requests in {} milliseconds, request rate of {} reqs per millisec",
+        LOGGER.info("Executed {} requests in {} milliseconds, request rate of {} reqs per sec",
                 numRequests, execTime, (numRequests.get()  * 1000.0) / execTime);
     }
 

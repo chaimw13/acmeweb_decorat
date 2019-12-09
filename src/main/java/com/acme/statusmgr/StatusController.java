@@ -2,6 +2,7 @@ package com.acme.statusmgr;
 
 import com.acme.diskmgr.DiskManager;
 
+import com.acme.statusmgr.beans.ServerStatus;
 import com.acme.statusmgr.commands.*;
 import com.acme.statusmgr.executors.*;
 import com.acme.statusmgr.beans.DecoratorStyle;
@@ -54,7 +55,7 @@ public class StatusController {
 
 
     @RequestMapping("/status")
-    public BasicServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
+    public ServerStatus getStatus(@RequestParam(value = "name", defaultValue = "Anonymous") String name) {
         BasicServerStatusCmd cmd = new BasicServerStatusCmd(counter.incrementAndGet(), template, name);
         executor.handleCommand(cmd);
         return cmd.getResult();

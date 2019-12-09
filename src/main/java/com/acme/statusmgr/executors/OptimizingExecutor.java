@@ -14,21 +14,22 @@ import static com.acme.statusmgr.commands.ExecutableWebCommands.CmdState.ENQUEUE
 /**
  * Executor with optimization for coalescing duplicate commands to be executed once.
  * Optimization is accomplished by organizing requests into different queues, one
- * for each unique command type that is encountered during execution. A Map keeps track
- * of the queue for each unique command type. A unique command type would be a command like
- * /server/status/detailed combined with a particular list of details requested.
+ * for each unique command flavor that is encountered during execution. A Map keeps track
+ * of the queue for each unique command flavor. A unique command flavor would be a command like
+ * /server/status/detailed combined with a particular list of details requested in a certain order.
  */
 public class OptimizingExecutor implements IExecutor {
     static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    // A Map between unique command-types and the Queue that will handle those commands
+    // A Map between unique command-flavor and the Queue that will handle those commands
+    // This is the key to divising work across multiple threads, based on the command flavor
     ConcurrentHashMap<String, OptimizingExecutorJobQ> jobQueuesMap;
 
     /**
-     * Construct an executor object, with the map to keep track of all queues for all command-types
+     * Construct an executor object, with the map to keep track of all queues for all command-flavors
      */
     public OptimizingExecutor() {
-        jobQueuesMap = new ConcurrentHashMap<>();   // allocate map of command-types to queues
+        jobQueuesMap = new ConcurrentHashMap<>();   // allocate map of command-flavors to queues
     }
 
 
@@ -74,16 +75,17 @@ public class OptimizingExecutor implements IExecutor {
      */
     private OptimizingExecutorJobQ getCmdJobQ(ExecutableWebCommands command) {
 
-        // every command-type has a unique string value used as Key for the queue map
-        // get the queue for this exact command-type, if it exists already
-        OptimizingExecutorJobQ thisCmdJobQ = jobQueuesMap.get(command.toString());
+        // every command-flavor has a unique string value used as Key for the queue map
+        // get the queue for this exact command-flavor, if it exists already
+        String commandKey = command.toString();
+        OptimizingExecutorJobQ thisCmdJobQ = jobQueuesMap.get(commandKey);
 
         if (thisCmdJobQ == null) {
-            // Make new queue for this command-type, add to the map of cmd-types to queues
-            thisCmdJobQ = new OptimizingExecutorJobQ();
+            // Make new queue for this command-flavor, add to the map of cmd-flavor to queues
+            thisCmdJobQ = new OptimizingExecutorJobQ(commandKey);
             // add it to queue map
-            jobQueuesMap.put(command.toString(), thisCmdJobQ);
-            LOGGER.info("Created new queue for cmd-type {}", command.toString());
+            jobQueuesMap.put(commandKey, thisCmdJobQ);
+            LOGGER.info("Created new queue for cmd-flavor {}", commandKey);
         }
 
         return thisCmdJobQ;

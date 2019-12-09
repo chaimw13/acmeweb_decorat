@@ -7,6 +7,8 @@ import com.acme.statusmgr.commands.ExecutableWebCommands;
  * queue, and is used for wait/notify to coordinate threads.
  */
 public class EJob {
+    static final long STALE_MSECS = (10 * 1000);  // accept results up to 10 seconds old
+
     ExecutableWebCommands command;      // The command to be ran
     long msTimeEnqueued;                // time it was added to queue to be run
 
@@ -17,5 +19,10 @@ public class EJob {
     public EJob(ExecutableWebCommands command) {
         this.command = command;
         msTimeEnqueued = System.currentTimeMillis();
+    }
+
+    public Boolean isRecent()
+    {
+        return (System.currentTimeMillis() - this.msTimeEnqueued) < STALE_MSECS;
     }
 }
