@@ -8,26 +8,20 @@ import java.lang.invoke.MethodHandles;
 /**
  * Serial command executor, will execute commands single file, but could have optimizations for order, etc.
  */
-public class SerialExecutor {
+public class SerialExecutor implements IExecutor{
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
-     * The command to execute, TODO could be a list.
+     * Construct an executor
      */
-    private ExecutableWebCommands command;
-
-    /**
-     * Construct an executor, initialize with the command to be executed.
-     * @param command command to be executed
-     */
-    public SerialExecutor(ExecutableWebCommands command) {
-        this.command = command;
+    public SerialExecutor() {
     }
 
     /**
-     * Execute the command immediately, e.g. with no optimizations
+     * Handle the command immediately, e.g. with no optimizations
+     * @param command command to be executed
      */
-    public void handleImmidiatly()
+    public void handleCommand(ExecutableWebCommands command)
     {
         if (command.getEstimatedTime() > 120) {
             LOGGER.warn("Requested to process long {} sec cmd synchronously", command.getEstimatedTime());
