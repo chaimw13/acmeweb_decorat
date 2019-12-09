@@ -3,7 +3,7 @@ package com.acme.statusmgr.commands;
 /**
  * Interface for all executable command, the Invoker(Executor) will call this methods.
  */
-public interface ExecutableWebCommands <cmdType>{
+public interface ExecutableWebCommands <prevCmdType>{
 
     // define the different states of a command
     enum CmdState {NOTSTARTED, ENQUEUED, INPROGRESS, COMPLETED, ERROR}
@@ -12,7 +12,7 @@ public interface ExecutableWebCommands <cmdType>{
     void execute();
 
     // execute the command, merging with status description available in the passed in command
-    void execute(cmdType command);
+    void execute(prevCmdType command);
 
     // return a metric indicating relative cost of command
     int getEstimatedTime();
